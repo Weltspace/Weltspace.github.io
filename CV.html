@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jintao Guo - CV</title>
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --muted:#555;
+    --line:#333;
+    --hair:#ccc;
+    --accent:#17456e;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#eceff3;color:var(--ink);
+    font-family:"Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei","PingFang SC",Arial,sans-serif;}
+  body{font-size:11.5px;line-height:1.45;}
+
+  /* ===== Bilingual visibility ===== */
+  .lang-zh{display:none;}
+  body.zh .lang-en{display:none;}
+  body.zh .lang-zh{display:revert;}
+
+  /* ===== Toolbar (screen only) ===== */
+  .toolbar{position:fixed;top:14px;right:18px;display:flex;gap:8px;z-index:9;}
+  .tb-btn{
+    background:#fff;color:var(--muted);border:1px solid var(--hair);border-radius:20px;
+    padding:7px 15px;font-size:13px;font-weight:600;cursor:pointer;
+    box-shadow:0 4px 14px rgba(20,35,60,.12);text-decoration:none;
+    font-family:inherit;transition:all .15s ease;
+  }
+  .tb-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .tb-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .tb-btn.primary:hover{background:#0f3a60;}
+
+  .page{width:210mm;min-height:297mm;margin:14px auto;background:#fff;
+    box-shadow:0 10px 32px rgba(20,35,60,.15);padding:11mm 14mm 9mm 14mm;}
+
+  /* ===== Header ===== */
+  header{text-align:center;border-bottom:2px solid var(--line);padding-bottom:6px;}
+  h1{font-size:23px;font-weight:800;letter-spacing:5px;margin:0 0 3px 0;}
+  .role{font-size:12px;font-weight:600;color:var(--accent);margin-bottom:4px;letter-spacing:.3px;}
+  .contact{font-size:10.5px;color:var(--muted);}
+  .contact b{color:var(--ink);font-weight:600;}
+  .contact span{margin:0 6px;}
+  .contact a{color:inherit;text-decoration:none;}
+
+  /* ===== Summary ===== */
+  .summary{margin:6px 0 0 0;font-size:11.5px;color:#333;text-align:justify;}
+  .summary b{color:var(--accent);}
+
+  /* ===== Sections ===== */
+  section{margin-top:4px;}
+  h2{font-size:13.5px;font-weight:800;color:var(--ink);margin:0 0 3px 0;letter-spacing:1px;
+    border-bottom:1px solid var(--hair);padding-bottom:2px;}
+
+  /* ===== Entry rows ===== */
+  .entry{margin-bottom:4px;}
+  .entry:last-child{margin-bottom:0;}
+  .entry-head{display:flex;align-items:baseline;gap:10px;}
+  .entry-title{font-size:12.5px;font-weight:700;}
+  .entry-date{margin-left:auto;font-size:10.5px;color:var(--muted);white-space:nowrap;}
+  .entry-role{font-size:10.5px;color:var(--accent);font-weight:600;white-space:nowrap;}
+  .entry-sub{font-size:10.5px;color:var(--muted);margin:1.5px 0 2.5px 0;}
+  .entry-sub .sep{margin:0 5px;color:#bbb;}
+  .entry-sub a{color:var(--accent);text-decoration:none;}
+
+  /* ===== Education ===== */
+  .edu-line{font-size:12px;}
+  .edu-meta{font-size:11px;color:#333;margin-top:1px;}
+
+  /* ===== Lists ===== */
+  ul{margin:2px 0 0 0;padding-left:15px;}
+  li{margin:0.3px 0;text-align:justify;}
+  li::marker{color:var(--accent);}
+  .num{font-weight:700;color:var(--accent);}
+
+  /* ===== Skills ===== */
+  .skill-table{width:100%;border-collapse:collapse;font-size:11px;}
+  .skill-table td{vertical-align:top;padding:1.5px 0;}
+  .skill-k{width:96px;font-weight:700;color:var(--accent);white-space:nowrap;}
+  .edu-meta .k{color:var(--accent);font-weight:700;}
+
+  @page{size:A4;margin:0;}
+  @media print{
+    html,body{background:#fff;}
+    .page{width:210mm;margin:0;box-shadow:none;padding:7mm 13mm 6mm 13mm;}
+    .toolbar{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button id="lang-toggle" class="tb-btn" type="button">中文</button>
+  <button class="tb-btn" type="button" onclick="window.print()"><span class="lang-en">Print / PDF</span><span class="lang-zh">打印 / PDF</span></button>
+</div>
+
+<main class="page">
+
+  <header>
+    <h1><span class="lang-zh">郭津涛</span> <span class="lang-en" style="letter-spacing:1px;font-size:20px;">Jintao Guo</span></h1>
+    <div class="role">
+      <span class="lang-en">M.S. in Data Science | Algorithm / ML / Data Science | Privacy-Preserving ML &amp; Graph Algorithms</span>
+      <span class="lang-zh">数据科学硕士｜算法 / 机器学习 / 数据科学｜研究方向：隐私保护机器学习与图算法</span>
+    </div>
+    <div class="contact">
+      <span><b class="lang-en">Phone</b><b class="lang-zh">电话</b>: +86 17730653376</span>
+      <span><b class="lang-en">Email</b><b class="lang-zh">邮箱</b>: 225040008@link.cuhk.edu.cn</span>
+      <span><b class="lang-en">Location</b><b class="lang-zh">地点</b>: <span class="lang-en">Shenzhen</span><span class="lang-zh">深圳</span></span>
+      <!-- 主页链接，与电话、邮箱等放在同一行 -->
+      <span><b class="lang-en">Homepage</b><b class="lang-zh">主页</b>: <a href="https://weltspace.github.io/" target="_blank">weltspace.github.io</a></span>
+    </div>
+  </header>
+
+  <p class="summary">
+    <span class="lang-en"><b>Summary:</b> M.S. student in Data Science at CUHK-Shenzhen; B.S. in Statistics from Beijing Jiaotong University (Rank 5/65). First-author paper under review at USENIX Security 2027 (arXiv:2507.06508); project leader of a National-Level Innovation Training Program (top 3/130 at completion). Strong at both theoretical analysis and PyTorch engineering, with a solid statistics foundation and hands-on deep learning experience.</span>
+    <span class="lang-zh"><b>个人简介：</b>香港中文大学（深圳）数据科学硕士在读，本科北京交通大学统计学（Rank 5/65）。第一作者论文在投 USENIX Security 2027（arXiv:2507.06508），国家级大学生创新创业训练项目负责人（结题 Top 3/130）。擅长隐私保护图算法的理论推导与 PyTorch 工程实现，兼具统计学基础与深度学习实践经验。</span>
+  </p>
+
+  <section>
+    <h2><span class="lang-en">EDUCATION</span><span class="lang-zh">教育背景</span></h2>
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-title">
+          <span class="lang-en">The Chinese University of Hong Kong, Shenzhen</span>
+          <span class="lang-zh">香港中文大学（深圳）</span>
+        </div>
+        <div class="entry-role">
+          <span class="lang-en">M.S. in Data Science (full-time)</span>
+          <span class="lang-zh">数据科学硕士（全日制）</span>
+        </div>
+        <div class="entry-date">2025.09 - 2027.07</div>
+      </div>
+      <div class="edu-meta">
+        <span class="lang-en"><span class="k">GPA:</span> 3.55/4.0; <span class="k">Coursework:</span> Deep Learning, Machine Learning, Large Language Models, Stochastic Dynamic Programming</span>
+        <span class="lang-zh"><span class="k">GPA：</span>3.55/4.0；<span class="k">主修：</span>深度学习、机器学习、大语言模型、随机动态规划</span>
+      </div>
+    </div>
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-title">
+          <span class="lang-en">Beijing Jiaotong University</span>
+          <span class="lang-zh">北京交通大学</span>
+        </div>
+        <div class="entry-role">
+          <span class="lang-en">B.S. in Statistics (full-time)</span>
+          <span class="lang-zh">统计学本科（全日制）</span>
+        </div>
+        <div class="entry-date">2021.09 - 2025.07</div>
+      </div>
+      <div class="edu-meta">
+        <span class="lang-en"><span class="k">GPA:</span> 3.72/4.0; <span class="k">Rank:</span> 5/65; <span class="k">Coursework:</span> Probability Theory, Mathematical Statistics, Stochastic Processes, Optimization</span>
+        <span class="lang-zh"><span class="k">GPA：</span>3.72/4.0；<span class="k">Rank：</span>5/65；<span class="k">主修：</span>概率论、数理统计、随机过程、最优化</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="lang-en">RESEARCH</span><span class="lang-zh">科研经历</span></h2>
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-title">
+          <span class="lang-en">Locally Private Subgraph Counting: Noisy Adjacency Matrix and DP on Randomized Data</span>
+          <span class="lang-zh">局部差分隐私下的子图计数：噪声邻接矩阵与随机化数据上的差分隐私</span>
+        </div>
+        <div class="entry-date">2023.04 - <span class="lang-en">present</span><span class="lang-zh">至今</span></div>
+      </div>
+      <div class="entry-sub">
+        <span class="lang-en">First author<span class="sep">|</span>Under review at USENIX Security 2027<span class="sep">|</span>Preprint <a href="https://arxiv.org/abs/2507.06508">arXiv:2507.06508</a><span class="sep">|</span>Code open-sourced<span class="sep">|</span>Leader of National-Level Innovation Training Program (top 3/130)</span>
+        <span class="lang-zh">第一作者<span class="sep">｜</span>在投 USENIX Security 2027<span class="sep">｜</span>预印本 <a href="https://arxiv.org/abs/2507.06508">arXiv:2507.06508</a><span class="sep">｜</span>代码已开源<span class="sep">｜</span>国家级大创项目负责人（结题 Top 3/130）</span>
+      </div>
+      <ul>
+        <li>
+          <span class="lang-en">Proposed dual frameworks — <b>Noisy Adjacency Matrix (NAM)</b> and <b>Differential Privacy on Randomized Data (DPRD)</b>: NAM reformulates edge-LDP subgraph counting as algebraic estimation over randomized matrices; DPRD resolves privacy composition when later rounds consume randomized outputs — strict edge-LDP <span class="num">without any trusted server or shuffler</span>.</span>
+          <span class="lang-zh">提出<b>噪声邻接矩阵（NAM）</b>与<b>随机化数据上的差分隐私（DPRD）</b>双框架：将 edge-LDP 下的子图计数转化为随机化矩阵上的代数估计问题，并解决交互式协议中后轮输入依赖随机化输出的隐私证明难题，在<span class="num">不依赖可信服务器 / Shuffler</span> 的前提下实现严格 edge-LDP 保证。</span>
+        </li>
+        <li>
+          <span class="lang-en">Designed one/two-round estimators (TriOR, TriMTR, QuaTR, TriTR*); gave the <span class="num">first exact closed-form MSE</span> for the RR-based one-round triangle estimator class and the <span class="num">first relative-error guarantee</span> for private subgraph counting.</span>
+          <span class="lang-zh">设计 TriOR、TriMTR、QuaTR、TriTR* 等一轮 / 二轮算法；给出 RR 型一轮三角计数类的<span class="num">首个精确闭式 MSE</span>，以及私有子图计数领域的<span class="num">首个相对误差理论保证</span>——当聚类系数与平均度稳定时，误差不随图规模增长。</span>
+        </li>
+        <li>
+          <span class="lang-en">Ran full experiments on real graphs (Facebook, CA-AstroPh) with privacy-budget sweeps and SOTA comparisons: at ε=1, TriMTR and QuaTR cut relative error to <span class="num">0.0198×–0.0066×</span> (up to <span class="num">~150×</span> more accurate) and <span class="num">0.1963×–0.4407×</span> of the strongest baselines; TriTR* beats TriTR at equal download cost.</span>
+          <span class="lang-zh">实现覆盖真实图数据集（Facebook、CA-AstroPh）、隐私预算扫描与 SOTA 对比的完整实验流程：ε=1 时，TriMTR 与 QuaTR 的相对误差分别降至最强基线的 <span class="num">0.0198×-0.0066×</span>（最高约 <span class="num">150 倍</span>提升）与 <span class="num">0.1963×-0.4407×</span>；TriTR* 在同等下载开销下优于等价于 TDP-VC 的 TriTR。</span>
+        </li>
+        <li>
+          <span class="lang-en">As first author and project leader: problem formulation, algorithm design, theoretical proofs, implementation, experiments, and paper writing.</span>
+          <span class="lang-zh">作为第一作者与项目负责人，负责问题建模、算法设计、理论证明、代码实现、实验评估与论文写作。</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="lang-en">PROJECTS</span><span class="lang-zh">项目经历</span></h2>
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-title">
+          <span class="lang-en">Fine-tuning LLMs to Solve the k-Secretary Problem</span>
+          <span class="lang-zh">微调大语言模型求解 k=2 Secretary Problem</span>
+        </div>
+        <div class="entry-role">
+          <span class="lang-en">Course project | AI + OR</span>
+          <span class="lang-zh">课程项目｜AI + OR</span>
+        </div>
+        <div class="entry-date">2025.11 - 2026.01</div>
+      </div>
+      <div class="entry-sub">Qwen2.5-1.5B/7B<span class="sep">|</span>SFT + LoRA</div>
+      <ul>
+        <li>
+          <span class="lang-en">Formulated the k-Secretary problem as sequential accept/reject decisions for an LLM; generated training trajectories from the optimal policy with state variables in the prompt; fine-tuned Qwen2.5 with SFT + LoRA and built a per-round evaluation pipeline with sequence-level reward.</span>
+          <span class="lang-zh">将运筹学 k-Secretary 问题转化为 LLM 逐候选人"接受 / 拒绝"的顺序决策任务；基于最优策略生成训练序列，在 prompt 中注入当前候选人、历史结果、剩余名额等状态变量；使用 SFT + LoRA 微调 Qwen2.5 系列模型，搭建逐轮决策评测流程并计算序列级 reward。</span>
+        </li>
+        <li>
+          <span class="lang-en">Fine-tuned models clearly beat untuned ones; higher median score than the OR-optimal policy in some settings.</span>
+          <span class="lang-zh">微调模型显著优于未微调模型；期望收益低于 OR 最优策略，但部分设置下得分中位数更高。</span>
+        </li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-title">
+          <span class="lang-en">Speech Prediction with Neural Audio Codec Tokens</span>
+          <span class="lang-zh">基于神经音频 Codec Token 的语音预测实验</span>
+        </div>
+        <div class="entry-role">
+          <span class="lang-en">Deep Learning final project</span>
+          <span class="lang-zh">深度学习 Final Project</span>
+        </div>
+        <div class="entry-date">2026.03 - 2026.04</div>
+      </div>
+      <div class="entry-sub">PyTorch<span class="sep">|</span>EnCodec / FACodec<span class="sep">|</span><span class="lang-en">sequence prediction</span><span class="lang-zh">序列预测</span></div>
+      <ul>
+        <li>
+          <span class="lang-en">Converted speech waveforms into discrete tokens with EnCodec / FACodec; built a complete "history token → future token" prediction and evaluation pipeline.</span>
+          <span class="lang-zh">用 EnCodec / FACodec 将语音波形转为离散 token，构建"历史 token → 未来 token"预测任务及完整训练评测流水线。</span>
+        </li>
+        <li>
+          <span class="lang-en">Decoded predictions back to speech and evaluated with STOI / PESQ plus subjective listening tests.</span>
+          <span class="lang-zh">训练序列预测模型并解码回语音，以 STOI、PESQ 客观指标结合主观听感评估质量；总结 token 表示、生成长度、模型容量与数据规模对预测质量的影响。</span>
+        </li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="entry-head">
+        <div class="entry-title">
+          <span class="lang-en">Schedule Buddy — Desktop Schedule Manager</span>
+          <span class="lang-zh">Schedule Buddy 桌面日程管理软件</span>
+        </div>
+        <div class="entry-role">
+          <span class="lang-en">Personal open-source project</span>
+          <span class="lang-zh">个人开源项目</span>
+        </div>
+        <div class="entry-date">2026.09</div>
+      </div>
+      <div class="entry-sub">Python / Flask / pywebview<span class="sep">|</span>Vanilla JS<span class="sep">|</span><a href="https://github.com/Weltspace/schedule-buddy">github.com/Weltspace/schedule-buddy</a></div>
+      <ul>
+        <li>
+          <span class="lang-en">Independently built a full-featured desktop schedule app (Flask, pywebview, vanilla JS, <span class="num">~2,000</span> LOC) with toast reminders, long-term goals with per-step deadlines, drag-and-drop reordering, weekly/overall reports and a bilingual UI.</span>
+          <span class="lang-zh">独立设计并开发一款功能完整的桌面日程管理软件（Flask 后端 + pywebview 桌面窗口 + 原生 JavaScript 前端，约 <span class="num">2000</span> 行代码）：支持 Windows 系统级 toast 提醒、长期目标与子任务截止日期、拖拽排序、周报/总报告统计与中英双语界面。</span>
+        </li>
+        <li>
+          <span class="lang-en">Handled Windows system integration: taskbar icon via explicit AppUserModelID and IPropertyStore COM writes, tray residency, atomic JSON persistence with CSRF protection; open-sourced on GitHub.</span>
+          <span class="lang-zh">完成多项 Windows 系统级集成：基于显式 AppUserModelID 与 IPropertyStore COM 写入实现任务栏图标自定义，实现托盘常驻、原子化 JSON 持久化与 CSRF 防护；代码开源于 GitHub。</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="lang-en">HONORS</span><span class="lang-zh">荣誉奖项</span></h2>
+    <ul>
+      <li>
+        <span class="lang-en"><span class="num">First Prize</span>, C/C++ Programming Group A, Beijing Division (Provincial), Lanqiao Cup National Competition (14th, top 10% of participants), 2024</span>
+        <span class="lang-zh">蓝桥杯全国软件和信息技术专业人才大赛 C/C++ 程序设计 A 组 北京赛区（省赛）一等奖（参赛者前 <span class="num">10%</span>），2024</span>
+      </li>
+      <li>
+        <span class="lang-en">Academic Excellence Scholarship, Beijing Jiaotong University (top <span class="num">10%</span>), 2023 - 2024</span>
+        <span class="lang-zh">北京交通大学学习优秀奖学金（Top <span class="num">10%</span>），2023 - 2024</span>
+      </li>
+      <li>
+        <span class="lang-en">Academic Excellence Scholarship, Beijing Jiaotong University (top <span class="num">25%</span>), 2021 - 2023</span>
+        <span class="lang-zh">北京交通大学学习优秀奖学金（Top <span class="num">25%</span>），2021 - 2023</span>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2><span class="lang-en">SKILLS</span><span class="lang-zh">专业技能</span></h2>
+    <table class="skill-table">
+      <tr>
+        <td class="skill-k"><span class="lang-en">Deep Learning</span><span class="lang-zh">深度学习</span></td>
+        <td>PyTorch, SFT / LoRA fine-tuning, Hugging Face Transformers</td>
+      </tr>
+      <tr>
+        <td class="skill-k"><span class="lang-en">Programming</span><span class="lang-zh">编程</span></td>
+        <td>
+          <span class="lang-en">Python (proficient), C++, R, AI-Assisted Dev (Vibe Coding)</span>
+          <span class="lang-zh">Python（熟练）、C++、R、AI 辅助编程（Vibe Coding）</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="skill-k"><span class="lang-en">Languages</span><span class="lang-zh">语言</span></td>
+        <td>
+          <span class="lang-en">Chinese (native); English (working proficiency, CET-6 524, all-English M.S. instruction)</span>
+          <span class="lang-zh">CET-6 524；硕士阶段全英文教学，英语可作为工作语言</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="skill-k"><span class="lang-en">Tools</span><span class="lang-zh">工具</span></td>
+        <td>
+          <span class="lang-en">Linux, Git, LaTeX; experiment reproduction, result analysis and visualization</span>
+          <span class="lang-zh">Linux、Git、LaTeX；熟悉实验复现、结果整理与可视化</span>
+        </td>
+      </tr>
+    </table>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    var btn = document.getElementById('lang-toggle');
+    function setLang(lang) {
+      var zh = lang === 'zh';
+      document.body.classList.toggle('zh', zh);
+      document.documentElement.lang = zh ? 'zh-CN' : 'en';
+      btn.textContent = zh ? 'English' : '中文';
+      try { localStorage.setItem('cv-lang', lang); } catch (e) {}
+    }
+    btn.addEventListener('click', function () {
+      setLang(document.body.classList.contains('zh') ? 'en' : 'zh');
+    });
+    var initial = 'en';
+    try {
+      var q = new URLSearchParams(location.search).get('lang');
+      if (q === 'zh' || q === 'en') initial = q;
+      else {
+        var saved = localStorage.getItem('cv-lang');
+        if (saved === 'zh' || saved === 'en') initial = saved;
+      }
+    } catch (e) {}
+    setLang(initial);
+  })();
+</script>
+</body>
+</html>
