@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jintao Guo (郭津涛)</title>
+<meta name="description" content="Jintao Guo - M.S. student in Data Science at CUHK-Shenzhen. Research on differential privacy, graph algorithms and machine learning." />
+<meta name="theme-color" content="#ffffff" />
+<script>
+  (function () {
+    var root = document.documentElement;
+    root.classList.add('js');
+    var t = 'light';
+    try {
+      t = localStorage.getItem('site-theme') ||
+          (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    } catch (e) {}
+    root.setAttribute('data-theme', t);
+  })();
+</script>
+<style>
+  /* ==================== 设计令牌 ==================== */
+  :root {
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --nav-bg: rgba(255, 255, 255, .78);
+    --nav-panel: rgba(255, 255, 255, .97);
+    --on-accent: #ffffff;
+
+    --ink: #101720;
+    --ink-soft: #2c3644;
+    --muted: #5b6675;
+    --faint: #8b96a5;
+
+    --accent: #14507c;
+    --accent-2: #2b86c5;
+    --accent-ink: #0c3a5c;
+    --accent-soft: #ecf4fa;
+    --accent-line: #d0e2f0;
+
+    --line: #e5eaf1;
+    --line-2: #d3dce7;
+
+    --bg: #ffffff;
+    --bg-soft: #f6f9fc;
+    --bg-elev: #ffffff;
+
+    --warm: #a35a0a;
+    --warm-soft: #fdf4e8;
+    --warm-line: rgba(163, 90, 10, .16);
+
+    --green: #0f7a5a;
+
+    --radius: 16px;
+    --shadow-1: 0 1px 2px rgba(13, 40, 64, .05), 0 3px 10px -6px rgba(13, 40, 64, .16);
+    --shadow-2: 0 14px 34px -16px rgba(13, 40, 64, .30), 0 3px 10px -6px rgba(13, 40, 64, .12);
+  }
+
+  [data-theme="dark"] {
+    --nav-bg: rgba(12, 17, 23, .78);
+    --nav-panel: rgba(15, 21, 29, .97);
+    --on-accent: #07131d;
+
+    --ink: #e9eef5;
+    --ink-soft: #c3cddb;
+    --muted: #93a0b1;
+    --faint: #6c7889;
+
+    --accent: #6cb6ea;
+    --accent-2: #8ecdf6;
+    --accent-ink: #bfe2fa;
+    --accent-soft: #12273a;
+    --accent-line: #1e3f5b;
+
+    --line: #232c38;
+    --line-2: #2e3946;
+
+    --bg: #0c1117;
+    --bg-soft: #121a23;
+    --bg-elev: #131b25;
+
+    --warm: #e2a75e;
+    --warm-soft: #2a2114;
+    --warm-line: rgba(226, 167, 94, .22);
+
+    --green: #4dd6a8;
+
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, .40), 0 3px 10px -6px rgba(0, 0, 0, .60);
+    --shadow-2: 0 16px 38px -18px rgba(0, 0, 0, .85), 0 3px 10px -6px rgba(0, 0, 0, .60);
+  }
+
+  /* ==================== 基础 ==================== */
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, "Noto Sans",
+                 "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    overflow-x: hidden;
+    transition: background-color .3s ease, color .3s ease;
+  }
+
+  /* 背景光晕 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(880px 520px at 6% -14%, rgba(43, 134, 197, .12), transparent 62%),
+      radial-gradient(720px 460px at 102% -6%, rgba(20, 80, 124, .09), transparent 60%);
+  }
+  [data-theme="dark"] body::before {
+    background:
+      radial-gradient(880px 520px at 6% -14%, rgba(43, 134, 197, .16), transparent 62%),
+      radial-gradient(720px 460px at 102% -6%, rgba(108, 182, 234, .08), transparent 60%);
+  }
+
+  .nav, .profile, main, footer { position: relative; z-index: 1; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  ::selection { background: rgba(43, 134, 197, .22); }
+
+  .wrap {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 26px;
+  }
+
+  /* ==================== 双语显示 ==================== */
+  .lang-zh { display: none; }
+  body.zh .lang-en { display: none; }
+  body.zh .lang-zh { display: revert; }
+
+  /* ==================== 导航 ==================== */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--nav-bg);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .25s ease, background .3s ease;
+  }
+  .nav.scrolled { border-bottom-color: var(--line); }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    height: 64px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: .01em;
+    flex: 0 0 auto;
+  }
+  .brand:hover { text-decoration: none; }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(145deg, #2b86c5, #0d3b5e 82%);
+    box-shadow: 0 5px 14px -6px rgba(20, 80, 124, .85), inset 0 1px 0 rgba(255, 255, 255, .28);
+    transition: transform .25s cubic-bezier(.2, .7, .3, 1);
+  }
+  .brand:hover .brand-mark { transform: rotate(-6deg) scale(1.06); }
+
+  .brand-text { font-size: 15px; }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .nav-links a {
+    position: relative;
+    padding: 7px 11px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    white-space: nowrap;
+    transition: color .18s ease, background .18s ease;
+  }
+  .nav-links a:hover {
+    color: var(--accent);
+    background: var(--accent-soft);
+    text-decoration: none;
+  }
+  .nav-links a.cv-link {
+    color: var(--accent);
+    font-weight: 650;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+  }
+  .nav-links a.cv-link:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color .18s, border-color .18s, background .18s, transform .18s;
+  }
+  .icon-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+  .icon-btn:active { transform: scale(.94); }
+  .icon-btn svg { width: 16px; height: 16px; }
+
+  .icon-sun { display: none; }
+  [data-theme="dark"] .icon-sun { display: block; }
+  [data-theme="dark"] .icon-moon { display: none; }
+
+  .lang-btn {
+    height: 34px;
+    padding: 0 15px;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: .02em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .18s, border-color .18s, background .18s;
+  }
+  .lang-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+
+  .burger { display: none; }
+
+  /* ==================== 个人信息 ==================== */
+  .profile {
+    padding: 72px 0 52px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .profile-top {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .avatar {
+    flex: 0 0 auto;
+    width: 88px;
+    height: 88px;
+    border-radius: 26px;
+    display: grid;
+    place-items: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    user-select: none;
+    background: linear-gradient(145deg, #3189c9, #0d3b5e 78%);
+    box-shadow:
+      0 18px 34px -18px rgba(13, 59, 94, .9),
+      inset 0 1px 0 rgba(255, 255, 255, .30);
+    position: relative;
+  }
+  .avatar::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 30px;
+    border: 1px solid var(--accent-line);
+    opacity: .8;
+    pointer-events: none;
+  }
+
+  .profile h1 {
+    font-size: clamp(28px, 4.4vw, 40px);
+    font-weight: 800;
+    letter-spacing: -.022em;
+    line-height: 1.14;
+  }
+  .zh-name {
+    font-size: .54em;
+    font-weight: 500;
+    letter-spacing: .10em;
+    color: var(--faint);
+    margin-left: 10px;
+  }
+
+  .headline {
+    margin-top: 11px;
+    font-size: 17px;
+    color: var(--ink-soft);
+  }
+  .headline b { color: var(--accent); font-weight: 700; }
+
+  .loc {
+    margin-top: 7px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .pulse-dot {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    position: relative;
+  }
+  .pulse-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2.2s cubic-bezier(.4, 0, .6, 1) infinite;
+  }
+  @keyframes pulse {
+    0%   { transform: scale(1);   opacity: .7; }
+    70%  { transform: scale(3.2); opacity: 0; }
+    100% { transform: scale(3.2); opacity: 0; }
+  }
+
+  .bio {
+    margin-top: 24px;
+    max-width: 770px;
+    font-size: 15.5px;
+    color: var(--ink-soft);
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .links {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 550;
+    box-shadow: var(--shadow-1);
+    transition: transform .2s cubic-bezier(.2, .7, .3, 1),
+                border-color .2s, color .2s, background .2s, box-shadow .2s;
+  }
+  .badge:hover {
+    transform: translateY(-2px);
+    color: var(--accent);
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+    box-shadow: var(--shadow-2);
+    text-decoration: none;
+  }
+
+  /* ==================== 亮点卡片 ==================== */
+  .cards3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .card {
+    position: relative;
+    padding: 22px 20px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+    transition: transform .24s cubic-bezier(.2, .7, .3, 1),
+                box-shadow .24s, border-color .24s;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
+    opacity: 0;
+    transition: opacity .24s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow-2);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card .icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 19px;
+    line-height: 1;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+  }
+
+  .card h3 {
+    margin-top: 13px;
+    font-size: 15.5px;
+    font-weight: 700;
+    letter-spacing: -.005em;
+    color: var(--ink);
+  }
+
+  .card ul {
+    list-style: none;
+    margin-top: 12px;
+    display: grid;
+    gap: 9px;
+  }
+  .card li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 13.5px;
+    line-height: 1.62;
+    color: var(--muted);
+  }
+  .card li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .64em;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: var(--accent-2);
+    opacity: .55;
+  }
+
+  /* ==================== 章节标题 ==================== */
+  section { padding: 54px 0 4px; }
+
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .sec-head h2 {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 1.34rem;
+    font-weight: 750;
+    letter-spacing: -.012em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .sec-head .bar {
+    width: 4px;
+    height: 20px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--accent-2), var(--accent));
+    box-shadow: 0 0 12px -2px var(--accent-2);
+  }
+  .sec-head::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--line-2), transparent);
+  }
+
+  .group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+    font-size: 11.5px;
+    font-weight: 750;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .group-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  /* ==================== 论文卡片 ==================== */
+  .pub {
+    position: relative;
+    padding: 26px 26px 24px 30px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+  }
+  .pub::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  }
+
+  .pub-title {
+    font-size: 17.5px;
+    font-weight: 750;
+    line-height: 1.45;
+    letter-spacing: -.012em;
+  }
+
+  .pub-authors {
+    margin-top: 10px;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+  .pub-authors .me {
+    color: var(--ink);
+    font-weight: 700;
+    border-bottom: 2px solid var(--accent-line);
+    padding-bottom: 1px;
+  }
+
+  .pub-status {
+    margin-top: 13px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    background: var(--warm-soft);
+    border: 1px solid var(--warm-line);
+    color: var(--warm);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: .01em;
+  }
+  .tag::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .pub-links {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    font-size: 13.5px;
+  }
+  .pub-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 9px;
+    border: 1px solid var(--line);
+    background: var(--bg-soft);
+    color: var(--accent);
+    font-weight: 600;
+    transition: background .18s, border-color .18s, color .18s, transform .18s;
+  }
+  .pub-links a:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    text-decoration: none;
+    transform: translateY(-1px);
+  }
+
+  .pub-desc {
+    margin-top: 16px;
+    font-size: 15px;
+    color: var(--ink-soft);
+    text-align: justify;
+    hyphens: auto;
+  }
+  .pub-desc b { color: var(--ink); font-weight: 700; }
+
+  .pub ul {
+    list-style: none;
+    margin-top: 16px;
+    display: grid;
+    gap: 10px;
+  }
+  .pub li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    text-align: justify;
+    hyphens: auto;
+  }
+  .pub li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: .66em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: .45;
+  }
+  .pub li b { color: var(--ink); font-weight: 700; }
+
+  .kw {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .kw span {
+    padding: 4px 11px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+
+  /* ==================== 项目卡片 ==================== */
+  .proj {
+    position: relative;
+    padding: 20px 24px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+    transition: transform .24s cubic-bezier(.2, .7, .3, 1),
+                box-shadow .24s, border-color .24s;
+  }
+  .proj::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(180deg, var(--accent-2), var(--accent));
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform .3s cubic-bezier(.2, .7, .3, 1);
+  }
+  .proj:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow-2);
+  }
+  .proj:hover::after { transform: scaleY(1); }
+
+  .proj + .proj { margin-top: 14px; }
+
+  .proj-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .proj-title {
+    font-size: 16.5px;
+    font-weight: 700;
+    letter-spacing: -.012em;
+    line-height: 1.45;
+  }
+
+  .proj-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 10px;
+    border-radius: 7px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    white-space: nowrap;
+  }
+
+  .proj-date {
+    margin-left: auto;
+    color: var(--faint);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .proj-stack {
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: .015em;
+    color: var(--faint);
+  }
+
+  .proj-desc {
+    margin-top: 12px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    text-align: justify;
+    hyphens: auto;
+  }
+  .proj-desc b { color: var(--ink); }
+
+  /* ==================== 教育 ==================== */
+  .edu-timeline {
+    position: relative;
+    padding-left: 26px;
+  }
+  .edu-timeline::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--accent-line), transparent);
+  }
+
+  .edu-item { position: relative; }
+  .edu-item + .edu-item { margin-top: 28px; }
+  .edu-item::before {
+    content: "";
+    position: absolute;
+    left: -26px;
+    top: 9px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2.5px solid var(--accent-2);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  .edu-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .edu-school { font-size: 16px; font-weight: 750; letter-spacing: -.01em; }
+  .edu-deg { font-size: 14.5px; color: var(--ink-soft); }
+  .edu-time {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .edu-detail {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--muted);
+    text-align: justify;
+  }
+
+  /* ==================== 荣誉 ==================== */
+  .awards {
+    list-style: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+  }
+  .awards li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 15px 22px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--line);
+    box-shadow: inset 3px 0 0 transparent;
+    transition: background .2s ease, box-shadow .2s ease;
+  }
+  .awards li:last-child { border-bottom: 0; }
+  .awards li:hover {
+    background: var(--bg-soft);
+    box-shadow: inset 3px 0 0 var(--accent-2);
+  }
+  .awards .yr {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .awards .hl { color: var(--accent); font-weight: 700; }
+
+  /* ==================== 技能 ==================== */
+  .skills {
+    display: grid;
+    grid-template-columns: 138px 1fr;
+    gap: 1px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--line);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+  }
+  .skills .k,
+  .skills .v {
+    background: var(--bg-elev);
+    padding: 15px 18px;
+    font-size: 14.5px;
+  }
+  .skills .k {
+    display: flex;
+    align-items: center;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--accent);
+  }
+  .skills .v { color: var(--ink-soft); }
+
+  /* ==================== 联系 ==================== */
+  .contact-box {
+    position: relative;
+    padding: 24px 26px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+    font-size: 15px;
+  }
+  .contact-box::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(440px 200px at 100% 0%, var(--accent-soft), transparent 72%);
+  }
+  .contact-box > * { position: relative; z-index: 1; }
+  .contact-box p + p { margin-top: 6px; }
+  .contact-box b { color: var(--accent); }
+  .contact-box .label {
+    display: inline-block;
+    min-width: 66px;
+    color: var(--faint);
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+
+  /* ==================== 页脚 ==================== */
+  footer {
+    margin-top: 58px;
+    padding: 28px 0 46px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 13px;
+    color: var(--faint);
+  }
+
+  /* ==================== 返回顶部 ==================== */
+  .to-top {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 60;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev);
+    color: var(--muted);
+    box-shadow: var(--shadow-2);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity .25s ease, transform .25s ease, visibility .25s,
+                color .18s, border-color .18s;
+  }
+  .to-top.show { opacity: 1; visibility: visible; transform: none; }
+  .to-top:hover { color: var(--accent); border-color: var(--accent-line); }
+  .to-top svg { width: 17px; height: 17px; }
+
+  /* ==================== 入场动画 ==================== */
+  .reveal { transition: opacity .65s ease, transform .65s cubic-bezier(.2, .7, .3, 1); }
+  .js .reveal { opacity: 0; transform: translateY(18px); }
+  .js .reveal.in { opacity: 1; transform: none; }
+
+  /* ==================== 响应式 ==================== */
+  @media (max-width: 860px) {
+    .burger { display: grid; }
+
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+      padding: 10px 18px 16px;
+      background: var(--nav-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: var(--shadow-2);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 11px 12px; font-size: 15px; border-radius: 10px; }
+    .nav-links a.cv-link { border-color: transparent; }
+  }
+
+  @media (max-width: 720px) {
+    .cards3 { grid-template-columns: 1fr; }
+
+    .skills { grid-template-columns: 1fr; }
+    .skills .k {
+      padding-bottom: 4px;
+      background: var(--bg-soft);
+      font-size: 12.5px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .skills .v { padding-top: 6px; }
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 0 20px; }
+
+    .profile { padding: 52px 0 40px; }
+    .profile-top { gap: 18px; align-items: flex-start; }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 19px;
+      font-size: 26px;
+    }
+    .avatar::after { inset: -3px; border-radius: 22px; }
+
+    .zh-name { display: block; margin-left: 0; margin-top: 2px; font-size: .5em; }
+
+    .headline { font-size: 15.5px; }
+    .loc { font-size: 13.5px; align-items: flex-start; }
+    .pulse-dot { margin-top: 9px; }
+
+    .pub { padding: 22px 18px 20px 22px; }
+    .proj { padding: 18px 18px; }
+
+    .proj-date { margin-left: 0; width: 100%; }
+    .edu-time { margin-left: 0; width: 100%; }
+
+    .awards li { padding: 13px 16px; font-size: 14px; }
+
+    .contact-box { padding: 20px 18px; }
+
+    .to-top { right: 16px; bottom: 16px; }
+  }
+
+  /* ==================== 无动画偏好 ==================== */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *,
+    *::before,
+    *::after {
+      animation-duration: .001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .001ms !important;
+    }
+    .js .reveal { opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ==================== 打印 ==================== */
+  @media print {
+    .nav,
+    .to-top,
+    .print-hide { display: none !important; }
+    body::before { display: none; }
+    body { font-size: 12pt; }
+    .card, .pub, .proj, .awards, .skills, .contact-box {
+      box-shadow: none !important;
+      break-inside: avoid;
+    }
+    section { padding: 18px 0 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ==================== 导航 ==================== -->
+  <nav class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="Jintao Guo — home">
+        <span class="brand-mark" aria-hidden="true">郭</span>
+        <span class="brand-text">Jintao Guo</span>
+      </a>
+
+      <div class="nav-actions">
+        <div class="nav-links" id="nav-links">
+          <a href="#top"><span class="lang-en">About</span><span class="lang-zh">关于</span></a>
+          <a href="#research"><span class="lang-en">Research</span><span class="lang-zh">科研</span></a>
+          <a href="#projects"><span class="lang-en">Projects</span><span class="lang-zh">项目</span></a>
+          <a href="#opensource"><span class="lang-en">Code</span><span class="lang-zh">开源</span></a>
+          <a href="#education"><span class="lang-en">Education</span><span class="lang-zh">教育</span></a>
+          <a href="#awards"><span class="lang-en">Awards</span><span class="lang-zh">荣誉</span></a>
+          <a href="#skills"><span class="lang-en">Skills</span><span class="lang-zh">技能</span></a>
+          <a href="#contact"><span class="lang-en">Contact</span><span class="lang-zh">联系</span></a>
+          <a href="CV.html" class="cv-link">📄 <span class="lang-en">CV</span><span class="lang-zh">简历</span></a>
+        </div>
+
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          </svg>
+        </button>
+
+        <button class="lang-btn" id="lang-toggle" type="button" aria-label="Switch language">中文</button>
+
+        <button class="icon-btn burger" id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== 个人信息 ==================== -->
+  <header class="profile" id="top">
+    <div class="wrap">
+      <div class="profile-top">
+        <div class="avatar" aria-hidden="true">郭</div>
+        <div>
+          <h1>Jintao Guo<span class="zh-name">郭津涛</span></h1>
+          <p class="headline">
+            <span class="lang-en">M.S. student in <b>Data Science</b> at The Chinese University of Hong Kong, Shenzhen</span>
+            <span class="lang-zh">香港中文大学（深圳）<b>数据科学</b>硕士在读</span>
+          </p>
+          <p class="loc">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span class="lang-en">Shenzhen, China · Differential Privacy · Graph Algorithms · Machine Learning</span>
+            <span class="lang-zh">中国深圳 · 差分隐私 · 图算法 · 机器学习</span>
+          </p>
+        </div>
+      </div>
+
+      <p class="bio">
+        <span class="lang-en">
+          I am a second-year master's student in Data Science at CUHK-Shenzhen, where I work on privacy-preserving
+          graph analytics. Before that, I received my B.S. in Statistics from Beijing Jiaotong University
+          (ranked 5/65). My current research focuses on local differential privacy (LDP) for decentralized graph
+          statistics — designing algorithms that come with rigorous privacy guarantees, closed-form error analysis,
+          and strong practical accuracy. I am also broadly interested in machine learning systems and
+          LLM fine-tuning.
+        </span>
+        <span class="lang-zh">
+          我是香港中文大学（深圳）数据科学专业二年级硕士生，研究方向为隐私保护的图数据分析。本科毕业于北京交通大学统计学专业（Rank 5/65）。目前的研究聚焦于面向去中心化图统计的局部差分隐私（LDP）——设计兼具严格隐私保证、闭式误差分析与高实用精度的算法。同时对机器学习系统与大语言模型微调也有广泛兴趣。
+        </span>
+      </p>
+
+      <div class="links">
+        <a class="badge" href="mailto:225040008@link.cuhk.edu.cn">✉️ Email</a>
+        <a class="badge" href="https://arxiv.org/abs/2507.06508">📄 arXiv:2507.06508</a>
+        <a class="badge" href="https://github.com/Weltspace">⌥ GitHub</a>
+        <a class="badge" href="CV.html">⬇ <span class="lang-en">Curriculum Vitae</span><span class="lang-zh">个人简历</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ==================== 亮点 ==================== -->
+    <section id="highlights" class="reveal">
+      <div class="cards3">
+        <div class="card">
+          <div class="icon">🔒</div>
+          <h3><span class="lang-en">Privacy Researcher</span><span class="lang-zh">隐私保护研究者</span></h3>
+          <ul>
+            <li><span class="lang-en">First-author paper under review at USENIX Security 2027</span><span class="lang-zh">第一作者论文在投 USENIX Security 2027</span></li>
+            <li><span class="lang-en">Local differential privacy for graph statistics, with closed-form error analysis</span><span class="lang-zh">局部差分隐私下的图统计，附闭式误差分析</span></li>
+            <li><span class="lang-en">Project leader of a National-Level Innovation Training Program (top 3/130)</span><span class="lang-zh">国家级大创项目负责人（结题 Top 3/130）</span></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="icon">⚙️</div>
+          <h3><span class="lang-en">ML Engineer</span><span class="lang-zh">机器学习工程</span></h3>
+          <ul>
+            <li><span class="lang-en">PyTorch, SFT / LoRA fine-tuning, Hugging Face Transformers</span><span class="lang-zh">PyTorch、SFT / LoRA 微调、Hugging Face Transformers</span></li>
+            <li><span class="lang-en">Hands-on: LLM fine-tuning, CNN from scratch, neural audio codecs</span><span class="lang-zh">实践经验：大模型微调、从零手写 CNN、神经音频编解码</span></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="icon">📐</div>
+          <h3><span class="lang-en">Statistics Foundation</span><span class="lang-zh">统计学根基</span></h3>
+          <ul>
+            <li><span class="lang-en">B.S. in Statistics, Beijing Jiaotong University (Rank 5/65)</span><span class="lang-zh">北京交通大学统计学本科（Rank 5/65）</span></li>
+            <li><span class="lang-en">Probability, mathematical statistics, stochastic processes, optimization</span><span class="lang-zh">概率论、数理统计、随机过程、最优化</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 科研 ==================== -->
+    <section id="research" class="reveal">
+      <div class="sec-head">
+        <h2><span class="bar" aria-hidden="true"></span><span class="lang-en">Research</span><span class="lang-zh">科研</span></h2>
+      </div>
+
+      <div class="group-label"><span class="lang-en">In Submission</span><span class="lang-zh">在投</span></div>
+
+      <div class="pub">
+        <div class="pub-title">Locally Private Subgraph Counting via Noisy Adjacency Matrix and Differential Privacy on Randomized Data</div>
+
+        <div class="pub-authors">
+          <span class="me">Jintao Guo</span>,
+          Ying Zhou,
+          GuiXun Luo,
+          Chao Li,
+          Yan Hu
+        </div>
+
+        <div class="pub-status">
+          <span class="tag"><span class="lang-en">Under review</span><span class="lang-zh">在投</span></span>
+          <span class="lang-en">USENIX Security 2027 · Preprint on arXiv since July 2025</span>
+          <span class="lang-zh">USENIX Security 2027 · 2025 年 7 月起预印本见 arXiv</span>
+        </div>
+
+        <div class="pub-links">
+          <a href="https://arxiv.org/abs/2507.06508">arXiv</a>
+          <a href="https://anonymous.4open.science/r/Locally_Private_Subgraph_Counting_via_NAM_DPRD-A421/"><span class="lang-en">Code (anonymized for review)</span><span class="lang-zh">代码（匿名评审版）</span></a>
+        </div>
+
+        <p class="pub-desc">
+          <span class="lang-en">
+            Subgraph counting (triangles, 4-cycles) is a fundamental primitive in graph analytics, yet existing
+            edge-LDP protocols force a harsh trade-off between privacy trust assumptions, accuracy, and
+            communication cost. I lead the design of a dual-framework architecture —
+            <b>Noisy Adjacency Matrix (NAM)</b> and <b>Differential Privacy on Randomized Data (DPRD)</b> —
+            that achieves strict edge-LDP <i>without any trusted server or shuffler</i>.
+          </span>
+          <span class="lang-zh">
+            子图计数（三角形、四边形）是图分析的基础原语，但现有 edge-LDP 协议在隐私信任假设、精度与通信开销之间难以兼顾。我主导设计了双框架架构——<b>噪声邻接矩阵（NAM）</b>与<b>随机化数据上的差分隐私（DPRD）</b>——在<i>不依赖任何可信服务器或 Shuffler</i> 的前提下实现严格的 edge-LDP 保证。
+          </span>
+        </p>
+
+        <ul>
+          <li>
+            <span class="lang-en"><b>Frameworks.</b> NAM reformulates private subgraph counting as algebraic estimation over randomized matrices; DPRD resolves the privacy-composition challenge when a later-round mechanism takes randomized data as input.</span>
+            <span class="lang-zh"><b>框架。</b>NAM 将私有子图计数重构为随机化矩阵上的代数估计问题；DPRD 解决了后轮机制以随机化数据为输入时的隐私组合证明难题。</span>
+          </li>
+          <li>
+            <span class="lang-en"><b>Algorithms.</b> One- and two-round estimators for triangle and quadrangle counting: TriOR, TriMTR, QuaTR, and TriTR*.</span>
+            <span class="lang-zh"><b>算法。</b>面向三角形与四边形计数的一轮 / 二轮估计器：TriOR、TriMTR、QuaTR、TriTR*。</span>
+          </li>
+          <li>
+            <span class="lang-en"><b>Theory.</b> The first exact closed-form MSE for the RR-based one-round triangle estimator class, and the first relative-error guarantee for private subgraph counting — error does not grow with graph size when the clustering coefficient and average degree are stable.</span>
+            <span class="lang-zh"><b>理论。</b>给出 RR 型一轮三角计数类的首个精确闭式 MSE，以及私有子图计数领域的首个相对误差理论保证——当聚类系数与平均度稳定时，误差不随图规模增长。</span>
+          </li>
+          <li>
+            <span class="lang-en"><b>Experiments.</b> At ε = 1, TriMTR and QuaTR reduce relative error to 0.0198×–0.0066× and 0.1963×–0.4407× of the strongest baselines (up to ~150× more accurate), outperforming all evaluated edge-LDP and shuffle-model methods.</span>
+            <span class="lang-zh"><b>实验。</b>在 ε = 1 下，TriMTR 与 QuaTR 将相对误差降至最强基线的 0.0198×–0.0066× 与 0.1963×–0.4407×（最高约 150 倍精度提升），优于所有被评估的 edge-LDP 与 shuffle 模型方法。</span>
+          </li>
+          <li>
+            <span class="lang-en"><b>My role.</b> Problem formulation, algorithm design, theoretical proofs, implementation, experiments, and paper writing, as first author and project leader of a National-Level Undergraduate Innovation Training Program (top 3 of 130 projects at completion).</span>
+            <span class="lang-zh"><b>我的角色。</b>作为第一作者与国家级大创项目负责人（结题 Top 3/130），负责问题建模、算法设计、理论证明、代码实现、实验评估与论文写作。</span>
+          </li>
+        </ul>
+
+        <div class="kw">
+          <span>Edge Local Differential Privacy</span>
+          <span>Noisy Adjacency Matrix</span>
+          <span>DPRD</span>
+          <span>Subgraph Counting</span>
+          <span>MSE / Variance Analysis</span>
+          <span>GPU-accelerated Experiments</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 项目 ==================== -->
+    <section id="projects" class="reveal">
+      <div class="sec-head">
+        <h2><span class="bar" aria-hidden="true"></span><span class="lang-en">Projects</span><span class="lang-zh">项目经历</span></h2>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">
+            <span class="lang-en">Fine-tuning LLMs to Solve the k-Secretary Problem</span>
+            <span class="lang-zh">微调大语言模型求解 k-Secretary 问题</span>
+          </div>
+          <span class="proj-tag"><span class="lang-en">Course · AI + OR</span><span class="lang-zh">课程项目 · AI + OR</span></span>
+          <span class="proj-date">2025.11 – 2026.01</span>
+        </div>
+        <div class="proj-stack">Qwen2.5-1.5B / 7B · SFT + LoRA</div>
+        <p class="proj-desc">
+          <span class="lang-en">
+            Formulate the k-Secretary problem as sequential accept/reject decisions for an LLM. Training sequences
+            are generated from the optimal policy, with state variables (current candidate, past outcomes, remaining
+            slots) injected into the prompt. Fine-tuned Qwen2.5 with SFT + LoRA and built a per-round evaluation
+            pipeline with sequence-level reward — the fine-tuned model clearly outperforms its untuned counterpart,
+            and achieves a higher median score than the OR-optimal policy in some settings.
+          </span>
+          <span class="lang-zh">
+            将运筹学 k-Secretary 问题转化为 LLM 逐候选人「接受 / 拒绝」的顺序决策任务：基于最优策略生成训练序列，在 prompt 中注入当前候选人、历史结果、剩余名额等状态变量；使用 SFT + LoRA 微调 Qwen2.5 系列模型，搭建逐轮决策评测流程并计算序列级 reward。微调后模型显著优于未微调模型；期望收益低于 OR 最优策略，但部分设置下得分中位数更高。
+          </span>
+        </p>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">
+            <span class="lang-en">CNN &amp; ResNet Image Classification from Scratch</span>
+            <span class="lang-zh">从零手写 CNN 与 ResNet 图像分类</span>
+          </div>
+          <span class="proj-tag"><span class="lang-en">Deep Learning Course</span><span class="lang-zh">深度学习课程项目</span></span>
+          <span class="proj-date">2025.11 – 2026.01</span>
+        </div>
+        <div class="proj-stack">PyTorch / NumPy · FashionMNIST</div>
+        <p class="proj-desc">
+          <span class="lang-en">
+            Implement forward/backward passes, convolution, pooling, BatchNorm, residual connections and optimizers
+            in pure NumPy, aligned in structure and training logic with PyTorch versions. Compare training stability,
+            convergence speed and accuracy on FashionMNIST: ~91% for CNN and ~96% for ResNet, with loss/accuracy
+            curves and confusion matrices analyzing model capacity, residual structure and training details.
+          </span>
+          <span class="lang-zh">
+            用 NumPy 从零实现前向 / 反向传播、卷积、池化、BatchNorm、残差连接与优化器，并与 PyTorch 框架版本对齐结构和训练逻辑；在 FashionMNIST 上对比两框架的训练稳定性、收敛速度与精度：CNN 约 91%，ResNet 约 96%；整理 loss / accuracy 曲线与混淆矩阵，分析模型容量、残差结构与训练细节的影响。
+          </span>
+        </p>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">
+            <span class="lang-en">Speech Prediction with Neural Audio Codec Tokens</span>
+            <span class="lang-zh">基于神经音频 Codec Token 的语音预测</span>
+          </div>
+          <span class="proj-tag"><span class="lang-en">DL Final Project</span><span class="lang-zh">深度学习 Final Project</span></span>
+          <span class="proj-date">2026.03 – 2026.04</span>
+        </div>
+        <div class="proj-stack">PyTorch · EnCodec / FACodec · sequence prediction</div>
+        <p class="proj-desc">
+          <span class="lang-en">
+            Convert speech waveforms into discrete tokens with EnCodec / FACodec and build a complete
+            "history token → future token" prediction pipeline. Trained sequence models are decoded back to audio
+            and evaluated with objective metrics (STOI, PESQ) plus subjective listening tests, summarizing how
+            token representation, generation length, model capacity and data scale affect quality.
+          </span>
+          <span class="lang-zh">
+            用 EnCodec / FACodec 将语音波形转为离散 token，构建「历史 token → 未来 token」预测任务及完整训练评测流水线；训练序列预测模型并解码回语音，以 STOI、PESQ 客观指标结合主观听感评估质量；总结 token 表示、生成长度、模型容量与数据规模对预测质量的影响。
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== 开源 ==================== -->
+    <section id="opensource" class="reveal">
+      <div class="sec-head">
+        <h2><span class="bar" aria-hidden="true"></span><span class="lang-en">Open Source</span><span class="lang-zh">开源项目</span></h2>
+      </div>
+
+      <div class="proj">
+        <div class="proj-head">
+          <div class="proj-title">
+            <span class="lang-en">Schedule Buddy — Desktop Schedule Manager</span>
+            <span class="lang-zh">Schedule Buddy 桌面日程管理软件</span>
+          </div>
+          <span class="proj-tag"><span class="lang-en">Personal · Open Source</span><span class="lang-zh">个人 · 开源</span></span>
+          <span class="proj-date">2026.09</span>
+        </div>
+        <div class="proj-stack">Python · Flask · pywebview · Vanilla JS</div>
+        <p class="proj-desc">
+          <span class="lang-en">
+            Independently designed and developed a full-featured Windows desktop schedule app (~2,000 LOC):
+            events with system-level toast reminders, long-term goals with per-step deadlines and drag-and-drop
+            reordering, weekly/overall statistics reports, and a bilingual (CN/EN) interface. Solved system-level
+            Windows integration — custom taskbar icon via an explicit AppUserModelID with IPropertyStore COM
+            writes, tray residency, and atomic JSON persistence with CSRF protection.
+          </span>
+          <span class="lang-zh">
+            独立设计并开发一款功能完整的 Windows 桌面日程管理软件（约 2000 行代码）：系统级 toast 提醒、长期目标与子任务截止日期、拖拽排序、周报/总报告统计与中英双语界面；完成多项系统级集成——基于显式 AppUserModelID 与 IPropertyStore COM 写入实现任务栏图标自定义、托盘常驻、原子化 JSON 持久化与 CSRF 防护。
+          </span>
+        </p>
+        <div class="pub-links">
+          <a href="https://github.com/Weltspace/schedule-buddy">GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 教育 ==================== -->
+    <section id="education" class="reveal">
+      <div class="sec-head">
+        <h2><span class="bar" aria-hidden="true"></span><span class="lang-en">Education</span><span class="lang-zh">教育背景</span></h2>
+      </div>
+
+      <div class="edu-timeline">
+        <div class="edu-item">
+          <div class="edu-row">
+            <span class="edu-school">The Chinese University of Hong Kong, Shenzhen</span>
+            <span class="edu-deg">
+              <span class="lang-en">— M.S. in Data Science</span>
+              <span class="lang-zh">— 数据科学硕士</span>
+            </span>
+            <span class="edu-time">2025.09 – 2027.07 <span class="lang-en">(expected)</span><span class="lang-zh">（在读）</span></span>
+          </div>
+          <div class="edu-detail">
+            <span class="lang-en">GPA 3.55/4.0 · Courses: Deep Learning, Machine Learning, Data Mining, Large Language Models, Stochastic Dynamic Programming</span>
+            <span class="lang-zh">GPA 3.55/4.0 · 主修：深度学习、机器学习、数据挖掘、大语言模型、随机动态规划</span>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-row">
+            <span class="edu-school">Beijing Jiaotong University</span>
+            <span class="edu-deg">
+              <span class="lang-en">— B.S. in Statistics</span>
+              <span class="lang-zh">— 统计学学士</span>
+            </span>
+            <span class="edu-time">2021.09 – 2025.07</span>
+          </div>
+          <div class="edu-detail">
+            <span class="lang-en">GPA 3.72/4.0 · Rank 5/65 · Courses: Probability Theory, Mathematical Statistics, Stochastic Processes, Optimization</span>
+            <span class="lang-zh">GPA 3.72/4.0 · Rank 5/65 · 主修：概率论、数理统计、随机过程、最优化</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 荣誉 ==================== -->
+    <section id="awards" class="reveal">
+      <div class="sec-head">
+        <h2><span class="bar" aria-hidden="true"></span><span class="lang-en">Awards</span><span class="lang-zh">荣誉奖项</span></h2>
+      </div>
+
+      <ul class="awards">
+        <li>
+          <span>
+            <span class="lang-en"><span class="hl">First Prize</span>, C/C++ Programming Group A, Beijing Division (Provincial) — Lanqiao Cup National Software and IT Talent Competition (14th, top 10% of participants)</span>
+            <span class="lang-zh"><span class="hl">一等奖</span>，蓝桥杯全国软件和信息技术专业人才大赛 C/C++ 程序设计 A 组 北京赛区（省赛）——第十四届（参赛者前 10%）</span>
+          </span>
+          <span class="yr">2024</span>
+        </li>
+        <li>
+          <span>
+            <span class="lang-en"><span class="hl">Project Leader</span>, National-Level Undergraduate Innovation and Entrepreneurship Training Program — completed in the top 3 of 130 projects</span>
+            <span class="lang-zh"><span class="hl">项目负责人</span>，国家级大学生创新创业训练计划——结题 Top 3/130</span>
+          </span>
+          <span class="yr">2024</span>
+        </li>
+        <li>
+          <span>
+            <span class="lang-en">Academic Excellence Scholarship, Beijing Jiaotong University <span class="hl">(top 10%)</span></span>
+            <span class="lang-zh">北京交通大学学习优秀奖学金<span class="hl">（前 10%）</span></span>
+          </span>
+          <span class="yr">2023–2024</span>
+        </li>
+        <li>
+          <span>
+            <span class="lang-en">Academic Excellence Scholarship, Beijing Jiaotong University (top 25%)</span>
+            <span class="lang-zh">北京交通大学学习优秀奖学金（前 25%）</span>
+          </span>
+          <span class="yr">2021–2023</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ==================== 技能 ==================== -->
+    <section id="skills" class="reveal">
+      <div class="sec-head">
+        <h2><span class="bar" aria-hidden="true"></span><span class="lang-en">Skills</span><span class="lang-zh">专业技能</span></h2>
+      </div>
+
+      <div class="skills">
+        <div class="k"><span class="lang-en">Programming</span><span class="lang-zh">编程</span></div>
+        <div class="v">
+          <span class="lang-en">Python (proficient), C++, R, NumPy, pandas, scikit-learn</span>
+          <span class="lang-zh">Python（熟练）、C++、R、NumPy、pandas、scikit-learn</span>
+        </div>
+
+        <div class="k"><span class="lang-en">Deep Learning</span><span class="lang-zh">深度学习</span></div>
+        <div class="v">
+          <span class="lang-en">PyTorch, SFT / LoRA fine-tuning, Hugging Face Transformers</span>
+          <span class="lang-zh">PyTorch、SFT / LoRA 微调、Hugging Face Transformers</span>
+        </div>
+
+        <div class="k"><span class="lang-en">Tools</span><span class="lang-zh">工具</span></div>
+        <div class="v">
+          <span class="lang-en">Linux, Git, LaTeX; experiment reproduction, result analysis and visualization</span>
+          <span class="lang-zh">Linux、Git、LaTeX；熟悉实验复现、结果整理与可视化</span>
+        </div>
+
+        <div class="k"><span class="lang-en">Languages</span><span class="lang-zh">语言</span></div>
+        <div class="v">
+          <span class="lang-en">Chinese (native); English (working proficiency, CET-6 524, all-English M.S. instruction)</span>
+          <span class="lang-zh">中文（母语）；英语（工作语言，CET-6 524，硕士阶段全英文教学）</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 联系 ==================== -->
+    <section id="contact" class="reveal">
+      <div class="sec-head">
+        <h2><span class="bar" aria-hidden="true"></span><span class="lang-en">Contact</span><span class="lang-zh">联系方式</span></h2>
+      </div>
+
+      <div class="contact-box">
+        <p>
+          <span class="lang-en">I am applying for <b>algorithm / machine learning / data science positions</b> and <b>PhD programs</b>, and I am always happy to discuss research collaborations on differential privacy and graph learning.</span>
+          <span class="lang-zh">我正在申请<b>算法 / 机器学习 / 数据科学岗位</b>与<b>博士项目</b>，欢迎讨论差分隐私与图学习相关的研究合作。</span>
+        </p>
+        <p style="margin-top:12px">
+          <span class="label"><span class="lang-en">Email</span><span class="lang-zh">邮箱</span></span>
+          <a href="mailto:225040008@link.cuhk.edu.cn">225040008@link.cuhk.edu.cn</a>
+        </p>
+        <p>
+          <span class="label"><span class="lang-en">Location</span><span class="lang-zh">地点</span></span>
+          <span class="lang-en">Shenzhen, China</span><span class="lang-zh">中国深圳</span>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Jintao Guo · <span class="lang-en">Last updated: September 2026</span><span class="lang-zh">最后更新：2026 年 9 月</span>
+  </footer>
+
+  <button class="to-top" id="to-top" type="button" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+
+      /* ---------- 语言切换 ---------- */
+      var langBtn = document.getElementById('lang-toggle');
+      function setLang(lang) {
+        var zh = lang === 'zh';
+        document.body.classList.toggle('zh', zh);
+        root.lang = zh ? 'zh-CN' : 'en';
+        langBtn.textContent = zh ? 'English' : '中文';
+        try { localStorage.setItem('site-lang', lang); } catch (e) {}
+      }
+      langBtn.addEventListener('click', function () {
+        setLang(document.body.classList.contains('zh') ? 'en' : 'zh');
+      });
+      var savedLang = null;
+      try { savedLang = localStorage.getItem('site-lang'); } catch (e) {}
+      setLang(savedLang === 'zh' ? 'zh' : 'en');
+
+      /* ---------- 主题切换 ---------- */
+      var themeBtn = document.getElementById('theme-toggle');
+      var themeMeta = document.querySelector('meta[name="theme-color"]');
+      themeBtn.addEventListener('click', function () {
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('site-theme', next); } catch (e) {}
+        if (themeMeta) themeMeta.setAttribute('content', next === 'dark' ? '#0c1117' : '#ffffff');
+      });
+      if (themeMeta && root.getAttribute('data-theme') === 'dark') {
+        themeMeta.setAttribute('content', '#0c1117');
+      }
+
+      /* ---------- 移动端菜单 ---------- */
+      var burger = document.getElementById('burger');
+      var navLinks = document.getElementById('nav-links');
+      burger.addEventListener('click', function () {
+        var open = navLinks.classList.toggle('open');
+        burger.setAttribute('aria-expanded', String(open));
+      });
+      navLinks.addEventListener('click', function (e) {
+        if (e.target.closest('a')) {
+          navLinks.classList.remove('open');
+          burger.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      /* ---------- 滚动状态 ---------- */
+      var nav = document.getElementById('nav');
+      var toTop = document.getElementById('to-top');
+      var ticking = false;
+
+      function onScroll() {
+        var y = window.pageYOffset || document.documentElement.scrollTop;
+        nav.classList.toggle('scrolled', y > 8);
+        toTop.classList.toggle('show', y > 640);
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          ticking = true;
+          window.requestAnimationFrame(onScroll);
+        }
+      }, { passive: true });
+      onScroll();
+
+      toTop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      /* ---------- 入场动画 ---------- */
+      var reveals = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+
+        Array.prototype.forEach.call(reveals, function (el) { io.observe(el); });
+      } else {
+        Array.prototype.forEach.call(reveals, function (el) { el.classList.add('in'); });
+      }
+    })();
+  </script>
+
+</body>
+</html>
